@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f0f8ff;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  color: #4682b4;
+  text-align: center;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  gap: 20px;
+}
+
+.input-section, .data-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.input-section {
+  flex: 1;
+  background-color: #ffffff; /* 결과 조회 페이지 배경과 통일 */
+}
+
+.input-nav-button {
+  background-color: #fffacd !important; /* 파스텔 노란색 */
+}
+
+.input-nav-button:hover {
+  background-color: #ffe4b5 !important; /* 호버 시 약간 더 진한 노란색 */
+}
+
+.data-section {
+  flex: 2;
+}
+
+h2 {
+  color: #4682b4;
+  border-bottom: 2px solid #add8e6;
+  padding-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #e6e6fa;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+input[type="text"], input[type="number"], select {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #b0e0e6;
+  color: black;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #add8e6;
+}
+
+.actions button {
+  margin-right: 5px;
+}
+
+.delete-button {
+  background-color: #ffb6c1;
+}
+
+.delete-button:hover {
+  background-color: #ff99aa;
+}
+
+.match-input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.match-input-row select,
+.match-input-row input[type="number"] {
+  width: 50%;
+  margin-bottom: 0;
+}
+
+nav {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+nav button {
+  flex-grow: 1;
+  margin: 0 5px;
+  background-color: #b0e0e6;
+  color: black;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+nav button:hover {
+  background-color: #add8e6;
+}
+
+.winner-highlight {
+  font-weight: bold;
+  color: #007bff; /* 파란색 계열로 하이라이트 */
+}
+
+#teams-table th:nth-child(1),
+#teams-table td:nth-child(1),
+#teams-table th:last-child,
+#teams-table td:last-child,
+#matches-table th:nth-child(1),
+#matches-table td:nth-child(1) {
+  white-space: nowrap;
+}

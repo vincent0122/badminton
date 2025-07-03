@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>데이터 입력 - 배드민턴 리그</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>데이터 입력</h1>
+
+  <nav>
+    <button onclick="location.href='index.html'">결과 조회</button>
+    <button class="input-nav-button" onclick="location.href='add_data.html'">데이터 입력</button>
+  </nav>
+
+  <div class="container">
+    <div class="input-section">
+      <h2>팀 추가</h2>
+      <input type="text" id="team-name" placeholder="팀 이름">
+      <button onclick="addTeam()">팀 추가</button>
+
+      <h2>경기결과 입력</h2>
+      <div class="match-input-row">
+        <select id="team1"></select>
+        <input type="number" id="score1" placeholder="점수">
+      </div>
+      <div class="match-input-row">
+        <select id="team2"></select>
+        <input type="number" id="score2" placeholder="점수">
+      </div>
+      <button onclick="addMatch()">경기결과 입력</button>
+    </div>
+  </div>
+
+  <script src="add_data_script.js"></script>
+</body>
+</html>

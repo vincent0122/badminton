@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배드민턴 리그</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>배드민턴 리그</h1>
+
+  <nav>
+    <button onclick="location.href='index.html'">결과 조회</button>
+    <button class="input-nav-button" onclick="location.href='add_data.html'">데이터 입력</button>
+  </nav>
+
+  <div class="container">
+    <div class="data-section">
+      <h2>팀 목록</h2>
+      <table id="teams-table">
+        <thead>
+          <tr>
+            <th>팀명</th>
+            <th>승</th>
+            <th>무</th>
+            <th>패</th>
+            <th>승률</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+        <tbody id="teams"></tbody>
+      </table>
+
+      <h2>경기 기록</h2>
+      <table id="matches-table">
+        <thead>
+          <tr>
+            <th>경기</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+        <tbody id="matches"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
