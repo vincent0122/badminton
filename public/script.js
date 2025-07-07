@@ -17,8 +17,8 @@ async function loadTeams() {
       <td>${team.losses}</td>
       <td>${Math.round(team.winRate)}%</td>
       <td>
-        <button onclick="editTeam(${team.id}, '${team.name}')">✏️</button>
-        <button class="delete-button" onclick="deleteTeam(${team.id})">🗑️</button>
+        <button onclick="editTeam('${team._id}', '${team.name}')">✏️</button>
+        <button class="delete-button" onclick="deleteTeam('${team._id}')">🗑️</button>
       </td>
     `;
   }
@@ -54,8 +54,8 @@ async function loadMatches() {
   matchesBody.innerHTML = '';
   for (const match of matches) {
     const row = matchesBody.insertRow();
-    let team1Name = await getTeamName(match.team1_id);
-    let team2Name = await getTeamName(match.team2_id);
+    let team1Name = await getTeamName(match.team1._id);
+    let team2Name = await getTeamName(match.team2._id);
     let displayTeam1 = team1Name;
     let displayScore1 = match.score1;
     let displayTeam2 = team2Name;
@@ -79,8 +79,8 @@ async function loadMatches() {
     row.innerHTML = `
       <td><span class="${winnerClass1}">${displayTeam1}</span> ${displayScore1} vs <span class="${winnerClass2}">${displayTeam2}</span> ${displayScore2}</td>
       <td>
-        <button onclick="editMatch(${match.id}, ${match.team1_id}, ${match.team2_id}, ${match.score1}, ${match.score2})">✏️</button>
-        <button class="delete-button" onclick="deleteMatch(${match.id})">🗑️</button>
+        <button onclick="editMatch('${match._id}', '${match.team1._id}', '${match.team2._id}', ${match.score1}, ${match.score2})">✏️</button>
+        <button class="delete-button" onclick="deleteMatch('${match._id}')">🗑️</button>
       </td>
     `;
   }
@@ -94,7 +94,7 @@ async function editMatch(id, team1_id, team2_id, currentScore1, currentScore2) {
         await fetch(`/api/matches/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ team1_id, team2_id, score1: newScore1, score2: newScore2 })
+            body: JSON.stringify({ team1: team1_id, team2: team2_id, score1: newScore1, score2: newScore2 })
         });
         loadMatches();
         loadTeams();
@@ -114,6 +114,6 @@ async function deleteMatch(id) {
 async function getTeamName(teamId) {
   const response = await fetch(`/api/teams`);
   const teams = await response.json();
-  const team = teams.find(t => t.id == teamId);
+  const team = teams.find(t => t._id == teamId);
   return team ? team.name : '알 수 없는 팀';
 }
