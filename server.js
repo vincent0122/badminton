@@ -1,25 +1,23 @@
-
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 app.use(express.json());
 
-// Serve index.html for the root path
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
-
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
 
 // Define Schemas
 const playerSchema = new mongoose.Schema({
@@ -28,32 +26,34 @@ const playerSchema = new mongoose.Schema({
 
 const teamSchema = new mongoose.Schema({
   name: String,
-  players: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }]
+  players: [{type: mongoose.Schema.Types.ObjectId, ref: "Player"}],
 });
 
 const matchSchema = new mongoose.Schema({
-  team1: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
-  team2: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
+  team1: {type: mongoose.Schema.Types.ObjectId, ref: "Team"},
+  team2: {type: mongoose.Schema.Types.ObjectId, ref: "Team"},
   score1: Number,
   score2: Number,
-  date: { type: Date, default: Date.now }
+  date: {type: Date, default: Date.now},
 });
 
-const Player = mongoose.model('Player', playerSchema);
-const Team = mongoose.model('Team', teamSchema);
-const Match = mongoose.model('Match', matchSchema);
+const Player = mongoose.model("Player", playerSchema);
+const Team = mongoose.model("Team", teamSchema);
+const Match = mongoose.model("Match", matchSchema);
 
 // API routes will be updated to use Mongoose models
 
 // Teams API
-app.get('/api/teams', async (req, res) => {
+app.get("/api/teams", async (req, res) => {
   try {
-    const teams = await Team.find().populate('players');
+    const teams = await Team.find().populate("players");
     const matches = await Match.find();
 
-    const teamsWithStats = teams.map(team => {
-      const stats = { wins: 0, draws: 0, losses: 0, winRate: 0 };
-      const teamMatches = matches.filter(m => m.team1.equals(team._id) || m.team2.equals(team._id));
+    const teamsWithStats = teams.map((team) => {
+      const stats = {wins: 0, draws: 0, losses: 0, winRate: 0};
+      const teamMatches = matches.filter(
+        (m) => m.team1.equals(team._id) || m.team2.equals(team._id)
+      );
 
       for (const match of teamMatches) {
         const score1 = match.score1;
@@ -73,123 +73,133 @@ app.get('/api/teams', async (req, res) => {
       if (totalGames > 0) {
         stats.winRate = (stats.wins / totalGames) * 100;
       }
-      
-      return { ...team.toObject(), ...stats };
+
+      return {...team.toObject(), ...stats};
     });
 
     teamsWithStats.sort((a, b) => b.winRate - a.winRate);
     res.json(teamsWithStats);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({message: err.message});
   }
 });
 
-app.post('/api/teams', async (req, res) => {
-  const { name, players } = req.body;
-  const newTeam = new Team({ name, players });
+app.post("/api/teams", async (req, res) => {
+  const {name, players} = req.body;
+  const newTeam = new Team({name, players});
   try {
     const savedTeam = await newTeam.save();
     res.status(201).json(savedTeam);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({message: err.message});
   }
 });
 
-app.put('/api/teams/:id', async (req, res) => {
+app.put("/api/teams/:id", async (req, res) => {
   try {
-    const updatedTeam = await Team.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedTeam = await Team.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     res.json(updatedTeam);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({message: err.message});
   }
 });
 
-app.delete('/api/teams/:id', async (req, res) => {
+app.delete("/api/teams/:id", async (req, res) => {
   try {
     await Team.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Team deleted' });
+    res.json({message: "Team deleted"});
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({message: err.message});
   }
 });
 
 // Matches API
-app.get('/api/matches', async (req, res) => {
+app.get("/api/matches", async (req, res) => {
   try {
-    const matches = await Match.find().populate('team1').populate('team2');
+    const matches = await Match.find().populate("team1").populate("team2");
     res.json(matches);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({message: err.message});
   }
 });
 
-app.post('/api/matches', async (req, res) => {
-  const { team1, team2, score1, score2 } = req.body;
-  const newMatch = new Match({ team1, team2, score1, score2 });
+app.post("/api/matches", async (req, res) => {
+  const {team1, team2, score1, score2} = req.body;
+  const newMatch = new Match({team1, team2, score1, score2});
   try {
     const savedMatch = await newMatch.save();
     res.status(201).json(savedMatch);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({message: err.message});
   }
 });
 
-app.put('/api/matches/:id', async (req, res) => {
+app.put("/api/matches/:id", async (req, res) => {
   try {
-    const updatedMatch = await Match.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedMatch = await Match.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true}
+    );
     res.json(updatedMatch);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({message: err.message});
   }
 });
 
-app.delete('/api/matches/:id', async (req, res) => {
+app.delete("/api/matches/:id", async (req, res) => {
   try {
     await Match.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Match deleted' });
+    res.json({message: "Match deleted"});
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({message: err.message});
   }
 });
 
-
 // Players API
-app.get('/api/players', async (req, res) => {
+app.get("/api/players", async (req, res) => {
   try {
     const players = await Player.find();
     res.json(players);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({message: err.message});
   }
 });
 
-app.post('/api/players', async (req, res) => {
-  const newPlayer = new Player({ name: req.body.name });
+app.post("/api/players", async (req, res) => {
+  const newPlayer = new Player({name: req.body.name});
   try {
     const savedPlayer = await newPlayer.save();
     res.status(201).json(savedPlayer);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({message: err.message});
   }
 });
 
-app.put('/api/players/:id', async (req, res) => {
+app.put("/api/players/:id", async (req, res) => {
   try {
-    const updatedPlayer = await Player.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedPlayer = await Player.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true}
+    );
     res.json(updatedPlayer);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({message: err.message});
   }
 });
 
-app.delete('/api/players/:id', async (req, res) => {
+app.delete("/api/players/:id", async (req, res) => {
   try {
     await Player.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Player deleted' });
+    res.json({message: "Player deleted"});
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({message: err.message});
   }
 });
 
-module.exports = app;
-
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
+});
