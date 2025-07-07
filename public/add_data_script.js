@@ -29,12 +29,12 @@ async function loadTeamsForSelect() {
 
   for (const team of teams) {
     const option1 = document.createElement('option');
-    option1.value = team.id;
+    option1.value = team._id;
     option1.textContent = team.name;
     team1Select.appendChild(option1);
 
     const option2 = document.createElement('option');
-    option2.value = team.id;
+    option2.value = team._id;
     option2.textContent = team.name;
     team2Select.appendChild(option2);
   }
