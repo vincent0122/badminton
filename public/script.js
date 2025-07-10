@@ -91,7 +91,7 @@ async function loadMatches() {
       }
 
       row.innerHTML = `
-        <td><span class="${winnerClass1}">${displayTeam1}</span> ${displayScore1} vs <span class="${winnerClass2}">${displayTeam2}</span> ${displayScore2}</td>
+        <td><span class="${winnerClass1}">${displayTeam1}</span> ${displayScore1}점 vs <span class="${winnerClass2}">${displayTeam2}</span> ${displayScore2}점</td>
         <td>
           <button onclick="editMatch('${match._id}', '${match.team1._id}', '${match.team2._id}', ${match.score1}, ${match.score2})">✏️</button>
           <button class="delete-button" onclick="deleteMatch('${match._id}')">🗑️</button>
