@@ -2,8 +2,8 @@
 
 body {
   font-family: 'Noto Sans KR', sans-serif;
-  background-color: #f0f8ff;
-  color: #333;
+  background-color: #000000;
+  color: #ffffff;
   margin: 0;
   padding: 20px;
   display: flex;
@@ -12,9 +12,10 @@ body {
 }
 
 h1 {
-  color: #4682b4;
+  color: #ffffff;
   text-align: center;
   width: 100%;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .container {
@@ -25,23 +26,25 @@ h1 {
 }
 
 .input-section, .data-section {
-  background-color: #ffffff;
+  background-color: #1a1a1a;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+  border: 1px solid #333;
 }
 
 .input-section {
   flex: 1;
-  background-color: #ffffff; /* 결과 조회 페이지 배경과 통일 */
+  background-color: #1a1a1a;
 }
 
 .input-nav-button {
-  background-color: #fffacd !important; /* 파스텔 노란색 */
+  background-color: #dc3545 !important; /* 레드 포인트 */
+  color: white !important;
 }
 
 .input-nav-button:hover {
-  background-color: #ffe4b5 !important; /* 호버 시 약간 더 진한 노란색 */
+  background-color: #c82333 !important;
 }
 
 .data-section {
@@ -49,8 +52,8 @@ h1 {
 }
 
 h2 {
-  color: #4682b4;
-  border-bottom: 2px solid #add8e6;
+  color: #ffffff;
+  border-bottom: 2px solid #333;
   padding-bottom: 10px;
 }
 
@@ -61,39 +64,54 @@ table {
 }
 
 th, td {
-  border: 1px solid #ddd;
+  border: 1px solid #333;
   padding: 12px;
   text-align: left;
+  color: #ffffff;
 }
 
 th {
-  background-color: #e6e6fa;
+  background-color: #333;
+  color: #ffffff;
 }
 
 tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #2a2a2a;
+}
+
+tr:nth-child(odd) {
+  background-color: #1a1a1a;
 }
 
 input[type="text"], input[type="number"], select {
   width: calc(100% - 22px);
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-radius: 4px;
+  background-color: #2a2a2a;
+  color: #ffffff;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 button {
-  background-color: #b0e0e6;
-  color: black;
+  background-color: #007bff;
+  color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #add8e6;
+  background-color: #0056b3;
 }
 
 .actions button {
@@ -101,11 +119,12 @@ button:hover {
 }
 
 .delete-button {
-  background-color: #ffb6c1;
+  background-color: #dc3545;
+  color: white;
 }
 
 .delete-button:hover {
-  background-color: #ff99aa;
+  background-color: #c82333;
 }
 
 .section-actions {
@@ -114,17 +133,18 @@ button:hover {
 }
 
 .delete-all-button {
-  background-color: #ff6b6b;
+  background-color: #dc3545;
   color: white;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .delete-all-button:hover {
-  background-color: #ff5252;
+  background-color: #c82333;
 }
 
 .match-input-row {
@@ -150,17 +170,19 @@ nav {
 nav button {
   flex-grow: 1;
   margin: 0 5px;
-  background-color: #b0e0e6;
-  color: black;
+  background-color: #333;
+  color: white;
   padding: 10px 15px;
-  border: none;
+  border: 1px solid #555;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 nav button:hover {
-  background-color: #add8e6;
+  background-color: #555;
+  border-color: #007bff;
 }
 
 .winner-highlight {
@@ -193,18 +215,19 @@ nav button:hover {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(5px);
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
   margin: 15% auto;
   padding: 0;
   border-radius: 15px;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+  border: 1px solid #555;
   animation: modalSlideIn 0.3s ease;
 }
 
@@ -220,10 +243,10 @@ nav button:hover {
 }
 
 .modal-header {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
   padding: 20px;
   border-radius: 15px 15px 0 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid #555;
 }
 
 .modal-header h3 {
@@ -265,22 +288,22 @@ nav button:hover {
 }
 
 .modal-btn-primary {
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
+  background: #007bff;
+  color: white;
 }
 
 .modal-btn-primary:hover {
-  background: white;
+  background: #0056b3;
   transform: translateY(-2px);
 }
 
 .modal-btn-secondary {
-  background: rgba(255, 255, 255, 0.2);
+  background: #6c757d;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #555;
 }
 
 .modal-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #5a6268;
   transform: translateY(-2px);
 }
