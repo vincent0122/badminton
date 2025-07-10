@@ -129,10 +129,24 @@ app.delete("/api/teams/:id", async (req, res) => {
 // Matches API
 app.get("/api/matches", async (req, res) => {
   try {
+    console.log("GET /api/matches 요청 받음");
     const matches = await Match.find().populate("team1").populate("team2");
-    res.json(matches);
+    console.log("매치 목록 조회됨:", matches.length, "개");
+    
+    // 유효한 매치만 필터링
+    const validMatches = matches.filter(match => {
+      const isValid = match.team1 && match.team2;
+      if (!isValid) {
+        console.warn("유효하지 않은 매치 발견:", match._id, "team1:", match.team1, "team2:", match.team2);
+      }
+      return isValid;
+    });
+    
+    console.log("유효한 매치:", validMatches.length, "개");
+    res.json(validMatches);
   } catch (err) {
-    res.status(500).json({message: err.message});
+    console.error("GET /api/matches 오류:", err);
+    res.status(500).json({message: err.message, stack: err.stack});
   }
 });
 

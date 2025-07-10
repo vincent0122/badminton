@@ -62,7 +62,7 @@ async function loadMatches() {
     
     for (const match of matches) {
       // 팀 정보가 없는 매치는 건너뛰기
-      if (!match.team1 || !match.team2) {
+      if (!match.team1 || !match.team2 || !match.team1._id || !match.team2._id) {
         console.warn('팀 정보가 없는 매치 건너뛰기:', match);
         continue;
       }
