@@ -54,10 +54,12 @@ app.get("/api/teams", async (req, res) => {
     const teamsWithStats = teams.map((team) => {
       const stats = {wins: 0, draws: 0, losses: 0, winRate: 0};
       const teamMatches = matches.filter(
-        (m) => m.team1.equals(team._id) || m.team2.equals(team._id)
+        (m) => m.team1 && m.team2 && (m.team1.equals(team._id) || m.team2.equals(team._id))
       );
 
       for (const match of teamMatches) {
+        if (!match.team1 || !match.team2) continue;
+        
         const score1 = match.score1;
         const score2 = match.score2;
         if (match.team1.equals(team._id)) {
