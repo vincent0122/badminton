@@ -96,10 +96,11 @@ async function loadMatches() {
       let result1 = '';
       let result2 = '';
       
-      if (parseInt(match.score1) > parseInt(match.score2)) {
+      // 표시되는 점수를 기준으로 승/패 판정
+      if (parseInt(displayScore1) > parseInt(displayScore2)) {
         result1 = '(승)';
         result2 = '(패)';
-      } else if (parseInt(match.score2) > parseInt(match.score1)) {
+      } else if (parseInt(displayScore2) > parseInt(displayScore1)) {
         result1 = '(패)';
         result2 = '(승)';
       } else {
