@@ -44,8 +44,12 @@ const Match = mongoose.model("Match", matchSchema);
 // Teams API
 app.get("/api/teams", async (req, res) => {
   try {
+    console.log("GET /api/teams 요청 받음");
     const teams = await Team.find().populate("players");
+    console.log("팀 목록 조회됨:", teams.length, "개");
+    
     const matches = await Match.find();
+    console.log("매치 목록 조회됨:", matches.length, "개");
 
     const teamsWithStats = teams.map((team) => {
       const stats = {wins: 0, draws: 0, losses: 0, winRate: 0};
@@ -76,20 +80,27 @@ app.get("/api/teams", async (req, res) => {
     });
 
     teamsWithStats.sort((a, b) => b.winRate - a.winRate);
+    console.log("팀 목록 반환:", teamsWithStats.length, "개");
     res.json(teamsWithStats);
   } catch (err) {
-    res.status(500).json({message: err.message});
+    console.error("GET /api/teams 오류:", err);
+    res.status(500).json({message: err.message, stack: err.stack});
   }
 });
 
 app.post("/api/teams", async (req, res) => {
-  const {name, players} = req.body;
-  const newTeam = new Team({name, players});
   try {
+    console.log("POST /api/teams 요청 받음:", req.body);
+    const {name, players} = req.body;
+    const newTeam = new Team({name, players});
+    console.log("새 팀 생성:", newTeam);
+    
     const savedTeam = await newTeam.save();
+    console.log("팀 저장 완료:", savedTeam);
     res.status(201).json(savedTeam);
   } catch (err) {
-    res.status(400).json({message: err.message});
+    console.error("POST /api/teams 오류:", err);
+    res.status(400).json({message: err.message, stack: err.stack});
   }
 });
 

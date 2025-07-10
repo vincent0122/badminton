@@ -4,39 +4,56 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function loadTeamsForSelect() {
-  const response = await fetch('/api/teams');
-  const teams = await response.json();
+  try {
+    const response = await fetch('/api/teams');
+    
+    if (!response.ok) {
+      console.error('팀 목록 로드 실패:', response.status, response.statusText);
+      const errorText = await response.text();
+      console.error('오류 내용:', errorText);
+      return;
+    }
+    
+    const teams = await response.json();
+    
+    if (!Array.isArray(teams)) {
+      console.error('팀 데이터가 배열이 아닙니다:', teams);
+      return;
+    }
 
-  const team1Select = document.getElementById('team1');
-  const team2Select = document.getElementById('team2');
-  team1Select.innerHTML = '';
-  team2Select.innerHTML = '';
+    const team1Select = document.getElementById('team1');
+    const team2Select = document.getElementById('team2');
+    team1Select.innerHTML = '';
+    team2Select.innerHTML = '';
 
-  // Add a default option
-  const defaultOption1 = document.createElement('option');
-  defaultOption1.value = '';
-  defaultOption1.textContent = '팀 선택';
-  defaultOption1.disabled = true;
-  defaultOption1.selected = true;
-  team1Select.appendChild(defaultOption1);
+    // Add a default option
+    const defaultOption1 = document.createElement('option');
+    defaultOption1.value = '';
+    defaultOption1.textContent = '팀 선택';
+    defaultOption1.disabled = true;
+    defaultOption1.selected = true;
+    team1Select.appendChild(defaultOption1);
 
-  const defaultOption2 = document.createElement('option');
-  defaultOption2.value = '';
-  defaultOption2.textContent = '팀 선택';
-  defaultOption2.disabled = true;
-  defaultOption2.selected = true;
-  team2Select.appendChild(defaultOption2);
+    const defaultOption2 = document.createElement('option');
+    defaultOption2.value = '';
+    defaultOption2.textContent = '팀 선택';
+    defaultOption2.disabled = true;
+    defaultOption2.selected = true;
+    team2Select.appendChild(defaultOption2);
 
-  for (const team of teams) {
-    const option1 = document.createElement('option');
-    option1.value = team._id;
-    option1.textContent = team.name;
-    team1Select.appendChild(option1);
+    for (const team of teams) {
+      const option1 = document.createElement('option');
+      option1.value = team._id;
+      option1.textContent = team.name;
+      team1Select.appendChild(option1);
 
-    const option2 = document.createElement('option');
-    option2.value = team._id;
-    option2.textContent = team.name;
-    team2Select.appendChild(option2);
+      const option2 = document.createElement('option');
+      option2.value = team._id;
+      option2.textContent = team.name;
+      team2Select.appendChild(option2);
+    }
+  } catch (error) {
+    console.error('팀 목록 로드 중 오류 발생:', error);
   }
 }
 
@@ -46,14 +63,32 @@ async function addTeam() {
     alert('팀 이름을 입력해주세요.');
     return;
   }
-  await fetch('/api/teams', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: teamName }),
-  });
-  document.getElementById('team-name').value = '';
-  alert('팀이 추가되었습니다!');
-  loadTeamsForSelect(); // 팀 목록 업데이트
+  
+  try {
+    const response = await fetch('/api/teams', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: teamName }),
+    });
+    
+    if (!response.ok) {
+      console.error('팀 추가 실패:', response.status, response.statusText);
+      const errorText = await response.text();
+      console.error('오류 내용:', errorText);
+      alert('팀 추가 중 오류가 발생했습니다.');
+      return;
+    }
+    
+    const result = await response.json();
+    console.log('팀 추가 성공:', result);
+    
+    document.getElementById('team-name').value = '';
+    alert('팀이 추가되었습니다!');
+    loadTeamsForSelect(); // 팀 목록 업데이트
+  } catch (error) {
+    console.error('팀 추가 중 오류 발생:', error);
+    alert('팀 추가 중 오류가 발생했습니다.');
+  }
 }
 
 async function addMatch() {
