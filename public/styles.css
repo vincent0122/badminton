@@ -147,6 +147,13 @@ nav button:hover {
 .winner-highlight {
   font-weight: bold;
   color: #007bff; /* 파란색 계열로 하이라이트 */
+  font-size: 1.2em; /* 글자 크기 증가 */
+}
+
+.winner-score {
+  font-weight: bold;
+  color: #007bff; /* 승리팀 점수도 파란색으로 */
+  font-size: 1.2em; /* 글자 크기 증가 */
 }
 
 #teams-table th:nth-child(1),

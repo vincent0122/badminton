@@ -11,7 +11,7 @@ async function loadTeams() {
   for (const team of teams) {
     const row = teamsBody.insertRow();
     row.innerHTML = `
-      <td>${team.name}</td>
+      <td>팀 ${team.name}</td>
       <td>${team.wins}</td>
       <td>${team.draws}</td>
       <td>${team.losses}</td>
@@ -90,8 +90,12 @@ async function loadMatches() {
         [winnerClass1, winnerClass2] = [winnerClass2, winnerClass1]; // Swap classes too
       }
 
+      // 승리팀 점수에도 클래스 적용
+      let scoreClass1 = winnerClass1 ? 'winner-score' : '';
+      let scoreClass2 = winnerClass2 ? 'winner-score' : '';
+      
       row.innerHTML = `
-        <td><span class="${winnerClass1}">${displayTeam1}</span> ${displayScore1}점 vs <span class="${winnerClass2}">${displayTeam2}</span> ${displayScore2}점</td>
+        <td><span class="${winnerClass1}">팀 ${displayTeam1}</span> <span class="${scoreClass1}">${displayScore1}점</span> vs <span class="${winnerClass2}">팀 ${displayTeam2}</span> <span class="${scoreClass2}">${displayScore2}점</span></td>
         <td>
           <button onclick="editMatch('${match._id}', '${match.team1._id}', '${match.team2._id}', ${match.score1}, ${match.score2})">✏️</button>
           <button class="delete-button" onclick="deleteMatch('${match._id}')">🗑️</button>
