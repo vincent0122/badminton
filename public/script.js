@@ -1,7 +1,79 @@
 document.addEventListener('DOMContentLoaded', () => {
   loadTeams();
   loadMatches();
+  initModal();
 });
+
+// 커스텀 모달 함수들
+function initModal() {
+  const modal = document.getElementById('custom-modal');
+  const confirmBtn = document.getElementById('modal-confirm');
+  const cancelBtn = document.getElementById('modal-cancel');
+  
+  // 모달 외부 클릭 시 닫기
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+}
+
+function showModal(title, message, isConfirm = false) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('custom-modal');
+    const titleEl = document.getElementById('modal-title');
+    const messageEl = document.getElementById('modal-message');
+    const confirmBtn = document.getElementById('modal-confirm');
+    const cancelBtn = document.getElementById('modal-cancel');
+    
+    titleEl.textContent = title;
+    messageEl.textContent = message;
+    
+    if (isConfirm) {
+      cancelBtn.style.display = 'inline-block';
+      confirmBtn.textContent = '확인';
+    } else {
+      cancelBtn.style.display = 'none';
+      confirmBtn.textContent = '확인';
+    }
+    
+    modal.style.display = 'block';
+    
+    // 이벤트 리스너 제거 (중복 방지)
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    const newCancelBtn = cancelBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+    
+    // 새 이벤트 리스너 추가
+    newConfirmBtn.addEventListener('click', () => {
+      closeModal();
+      resolve(true);
+    });
+    
+    if (isConfirm) {
+      newCancelBtn.addEventListener('click', () => {
+        closeModal();
+        resolve(false);
+      });
+    }
+  });
+}
+
+function closeModal() {
+  const modal = document.getElementById('custom-modal');
+  modal.style.display = 'none';
+}
+
+// 커스텀 alert 함수
+function customAlert(message, title = '알림') {
+  return showModal(title, message, false);
+}
+
+// 커스텀 confirm 함수
+function customConfirm(message, title = '확인') {
+  return showModal(title, message, true);
+}
 
 async function loadTeams() {
   const response = await fetch('/api/teams');
@@ -38,7 +110,8 @@ async function editTeam(id, currentName) {
 }
 
 async function deleteTeam(id) {
-  if (confirm('이 팀을 정말 삭제하시겠습니까?')) {
+  const confirmed = await customConfirm('이 팀을 정말 삭제하시겠습니까?');
+  if (confirmed) {
     await fetch(`/api/teams/${id}`, {
       method: 'DELETE',
     });
@@ -137,7 +210,8 @@ async function editMatch(id, team1_id, team2_id, currentScore1, currentScore2) {
 }
 
 async function deleteMatch(id) {
-  if (confirm('이 경기를 정말 삭제하시겠습니까?')) {
+  const confirmed = await customConfirm('이 경기를 정말 삭제하시겠습니까?');
+  if (confirmed) {
     await fetch(`/api/matches/${id}`, {
       method: 'DELETE',
     });
@@ -154,43 +228,45 @@ async function getTeamName(teamId) {
 }
 
 async function deleteAllTeams() {
-  if (confirm('정말로 모든 팀을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+  const confirmed = await customConfirm('정말로 모든 팀을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
+  if (confirmed) {
     try {
       const response = await fetch('/api/teams/all', {
         method: 'DELETE',
       });
       
       if (response.ok) {
-        alert('모든 팀이 삭제되었습니다.');
+        await customAlert('모든 팀이 삭제되었습니다.');
         loadTeams();
         loadMatches(); // 경기 기록도 새로고침
       } else {
-        alert('팀 삭제 중 오류가 발생했습니다.');
+        await customAlert('팀 삭제 중 오류가 발생했습니다.');
       }
     } catch (error) {
       console.error('전체 팀 삭제 중 오류:', error);
-      alert('팀 삭제 중 오류가 발생했습니다.');
+      await customAlert('팀 삭제 중 오류가 발생했습니다.');
     }
   }
 }
 
 async function deleteAllMatches() {
-  if (confirm('정말로 모든 경기 기록을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+  const confirmed = await customConfirm('정말로 모든 경기 기록을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
+  if (confirmed) {
     try {
       const response = await fetch('/api/matches/all', {
         method: 'DELETE',
       });
       
       if (response.ok) {
-        alert('모든 경기 기록이 삭제되었습니다.');
+        await customAlert('모든 경기 기록이 삭제되었습니다.');
         loadMatches();
         loadTeams(); // 팀 통계도 새로고침
       } else {
-        alert('경기 기록 삭제 중 오류가 발생했습니다.');
+        await customAlert('경기 기록 삭제 중 오류가 발생했습니다.');
       }
     } catch (error) {
       console.error('전체 경기 기록 삭제 중 오류:', error);
-      alert('경기 기록 삭제 중 오류가 발생했습니다.');
+      await customAlert('경기 기록 삭제 중 오류가 발생했습니다.');
     }
   }
 }
