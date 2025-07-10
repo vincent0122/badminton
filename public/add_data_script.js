@@ -75,7 +75,7 @@ async function addMatch() {
   await fetch('/api/matches', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ team1_id, team2_id, score1, score2 }),
+    body: JSON.stringify({ team1: team1_id, team2: team2_id, score1, score2 }),
   });
 
   document.getElementById('score1').value = '';
@@ -92,6 +92,6 @@ async function addMatch() {
 async function getTeamName(teamId) {
   const response = await fetch(`/api/teams`);
   const teams = await response.json();
-  const team = teams.find(t => t.id == teamId);
+  const team = teams.find(t => t._id == teamId);
   return team ? team.name : '알 수 없는 팀';
 }
