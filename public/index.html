@@ -18,6 +18,9 @@
   <div class="container">
     <div class="data-section">
       <h2>팀 목록</h2>
+      <div class="section-actions">
+        <button class="delete-all-button" onclick="deleteAllTeams()">전체 팀 삭제</button>
+      </div>
       <table id="teams-table">
         <thead>
           <tr>
@@ -33,6 +36,9 @@
       </table>
 
       <h2>경기 기록</h2>
+      <div class="section-actions">
+        <button class="delete-all-button" onclick="deleteAllMatches()">전체 경기 기록 삭제</button>
+      </div>
       <table id="matches-table">
         <thead>
           <tr>

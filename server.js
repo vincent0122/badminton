@@ -126,6 +126,18 @@ app.delete("/api/teams/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/teams/all", async (req, res) => {
+  try {
+    console.log("DELETE /api/teams/all 요청 받음");
+    const result = await Team.deleteMany({});
+    console.log("모든 팀 삭제 완료:", result.deletedCount, "개");
+    res.json({message: "All teams deleted", deletedCount: result.deletedCount});
+  } catch (err) {
+    console.error("DELETE /api/teams/all 오류:", err);
+    res.status(500).json({message: err.message});
+  }
+});
+
 // Matches API
 app.get("/api/matches", async (req, res) => {
   try {
@@ -179,6 +191,18 @@ app.delete("/api/matches/:id", async (req, res) => {
     await Match.findByIdAndDelete(req.params.id);
     res.json({message: "Match deleted"});
   } catch (err) {
+    res.status(500).json({message: err.message});
+  }
+});
+
+app.delete("/api/matches/all", async (req, res) => {
+  try {
+    console.log("DELETE /api/matches/all 요청 받음");
+    const result = await Match.deleteMany({});
+    console.log("모든 경기 삭제 완료:", result.deletedCount, "개");
+    res.json({message: "All matches deleted", deletedCount: result.deletedCount});
+  } catch (err) {
+    console.error("DELETE /api/matches/all 오류:", err);
     res.status(500).json({message: err.message});
   }
 });

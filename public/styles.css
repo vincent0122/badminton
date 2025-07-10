@@ -108,6 +108,25 @@ button:hover {
   background-color: #ff99aa;
 }
 
+.section-actions {
+  margin-bottom: 10px;
+  text-align: right;
+}
+
+.delete-all-button {
+  background-color: #ff6b6b;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.delete-all-button:hover {
+  background-color: #ff5252;
+}
+
 .match-input-row {
   display: flex;
   gap: 10px;

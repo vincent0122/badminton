@@ -152,3 +152,45 @@ async function getTeamName(teamId) {
   const team = teams.find(t => t._id == teamId);
   return team ? team.name : '알 수 없는 팀';
 }
+
+async function deleteAllTeams() {
+  if (confirm('정말로 모든 팀을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+    try {
+      const response = await fetch('/api/teams/all', {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        alert('모든 팀이 삭제되었습니다.');
+        loadTeams();
+        loadMatches(); // 경기 기록도 새로고침
+      } else {
+        alert('팀 삭제 중 오류가 발생했습니다.');
+      }
+    } catch (error) {
+      console.error('전체 팀 삭제 중 오류:', error);
+      alert('팀 삭제 중 오류가 발생했습니다.');
+    }
+  }
+}
+
+async function deleteAllMatches() {
+  if (confirm('정말로 모든 경기 기록을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+    try {
+      const response = await fetch('/api/matches/all', {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        alert('모든 경기 기록이 삭제되었습니다.');
+        loadMatches();
+        loadTeams(); // 팀 통계도 새로고침
+      } else {
+        alert('경기 기록 삭제 중 오류가 발생했습니다.');
+      }
+    } catch (error) {
+      console.error('전체 경기 기록 삭제 중 오류:', error);
+      alert('경기 기록 삭제 중 오류가 발생했습니다.');
+    }
+  }
+}
